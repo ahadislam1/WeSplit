@@ -78,17 +78,48 @@ struct ContentView: View {
 
 struct NewView: View {
     
+    @State private var input = ""
     @State private var inputTmpUnit = 0
     @State private var outputTmpUnit = 0
     
     let tmpUnits = ["Fahrenheit", "Celsius", "Kelvin"]
+    
+    var baseInput: Measurement<UnitTemperature> {
+        let x = Measurement(value: Double(input) ?? 0, unit: UnitTemperature.fahrenheit)
+        switch inputTmpUnit {
+        case 0:
+            return x.converted(to: .fahrenheit)
+        case 1:
+            let y = Measurement(value: Double(input) ?? 0, unit: UnitTemperature.celsius)
+            return y.converted(to: .fahrenheit)
+        case 2:
+            let z = Measurement(value: Double(input) ?? 0, unit: UnitTemperature.kelvin)
+            return z.converted(to: .fahrenheit)
+        default:
+            return x
+        }
+    }
+    
+    var output: Double {
+        switch outputTmpUnit {
+        case 0:
+            return baseInput.value
+        case 1:
+            return baseInput.converted(to: .celsius).value
+        case 2:
+            return baseInput.converted(to: .kelvin).value
+        default:
+            return 0
+        }
+    }
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     Text("Hi :)")
-                    Text("hey")
+                    
+                    TextField("Enter amount", text: $input)
                 }
                 
                 Section(header: Text("Input temperature")) {
@@ -110,7 +141,7 @@ struct NewView: View {
                 }
                 
                 Section {
-                    Text("Output: ")
+                    Text("Output: \(output, specifier: "%.2f")°")
                 }
             }
                 
