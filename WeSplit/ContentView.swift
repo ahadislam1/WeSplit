@@ -51,35 +51,78 @@ struct ContentView: View {
                     TextField("Number of people", text: $strNumberOfPeople)
                         .keyboardType(.numberPad)
                 }
-            
-            
-            Section(header: Text("How much tip do you want to leave?")) {
-                Picker("Tip percentage", selection: $tipPercentage) {
-                    ForEach(0 ..< tipPercentages.count) {
-                        Text("\(self.tipPercentages[$0])%")
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
                 
+                
+                Section(header: Text("How much tip do you want to leave?")) {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(0 ..< tipPercentages.count) {
+                            Text("\(self.tipPercentages[$0])%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
+                
+                Section(header: Text("Amount per person")) {
+                    Text("$\(totalPerPerson, specifier: "%.2f")")
+                }
+                
+                Section {
+                    Text("Total: $\(total, specifier: "%.2f")")
+                }
             }
-            
-            Section(header: Text("Amount per person")) {
-                Text("$\(totalPerPerson, specifier: "%.2f")")
-            }
-            
-            Section {
-                Text("Total: $\(total, specifier: "%.2f")")
-            }
+            .navigationBarTitle("WeSplit")
         }
-        .navigationBarTitle("WeSplit")
-    }
     }
 }
 
+struct NewView: View {
+    
+    @State private var inputTmpUnit = 0
+    @State private var outputTmpUnit = 0
+    
+    let tmpUnits = ["Fahrenheit", "Celsius", "Kelvin"]
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    Text("Hi :)")
+                    Text("hey")
+                }
+                
+                Section(header: Text("Input temperature")) {
+                    Picker("Temperature you'd like", selection: $inputTmpUnit) {
+                        ForEach(0..<tmpUnits.count) {
+                            Text("\(self.tmpUnits[$0])")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                Section(header: Text("Output temperature")) {
+                    Picker("Temperature you'd like", selection: $outputTmpUnit) {
+                        ForEach(0..<tmpUnits.count) {
+                            Text("\(self.tmpUnits[$0])")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                Section {
+                    Text("Output: ")
+                }
+            }
+                
+            .navigationBarTitle("Unit Conversion")
+        }
+    }
+    
+}
 
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NewView()
     }
 }
